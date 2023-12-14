@@ -1,7 +1,11 @@
 import { ChangeEvent, useEffect, useState } from "react";
 
 const DarkLightIcon = () => {
-  const [theme, setTheme] = useState<string>("dark");
+  const [theme, setTheme] = useState<string>(
+    (localStorage.getItem("theme")
+      ? localStorage.getItem("theme")
+      : "dark") as string
+  );
 
   const handleToggle = (e: ChangeEvent<HTMLInputElement>) => {
     // on input handle toggle the value.
