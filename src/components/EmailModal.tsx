@@ -1,16 +1,23 @@
 import { useRef, useState } from "react";
 import CustomInput from "./CustomInput";
+import { validateEmail } from "../utils/utils";
 
 const EmailModal = (props: { onEmailSend: (email: string) => void }) => {
   const { onEmailSend } = props;
   const [email, setEmail] = useState("");
+  const [emailError, setEmailError] = useState<string>();
   const modalCloseButtonRef = useRef<HTMLButtonElement | null>(null);
 
   const onOkClickHandler = (event: React.MouseEvent<HTMLButtonElement>) => {
     event.preventDefault();
-    if (!email) return;
+    const isEmailValid = validateEmail(email);
+    if (!isEmailValid) {
+      setEmailError("Enter a valid email");
+      return;
+    }
     onEmailSend(email);
     setEmail("");
+    setEmailError(undefined);
     modalCloseButtonRef.current?.click();
   };
 
@@ -28,7 +35,11 @@ const EmailModal = (props: { onEmailSend: (email: string) => void }) => {
             placeholder="Enter email address"
             type="email"
             value={email}
-            onChangeHandler={(e) => setEmail(e.target.value)}
+            errorMessage={emailError}
+            onChangeHandler={(e) => {
+              setEmail(e.target.value);
+              setEmailError(undefined);
+            }}
           />
         </div>
 

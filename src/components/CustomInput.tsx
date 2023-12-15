@@ -30,14 +30,18 @@ const CustomInput = (props: CustomInputProps) => {
         value={value}
         name={name}
         placeholder={placeholder}
-        className="input input-bordered input-primary w-full rounded-full"
+        className={`input input-bordered ${
+          errorMessage ? "input-error" : "input-primary"
+        } w-full rounded-full transition-all duration-500`}
         onChange={onChangeHandler}
       />
-      {errorMessage && (
-        <div className="label">
-          <span className="label-text-alt">{errorMessage}</span>
-        </div>
-      )}
+      <div
+        className={`label transition-all duration-300 ${
+          errorMessage ? "opactity-100" : "opacity-0 h-0 absolute"
+        }`}
+      >
+        <span className="label-text-alt text-error">{errorMessage}</span>
+      </div>
     </label>
   );
 };

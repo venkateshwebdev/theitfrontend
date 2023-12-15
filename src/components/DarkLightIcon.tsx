@@ -20,6 +20,10 @@ const DarkLightIcon = () => {
     const localTheme = localStorage.getItem("theme") ?? "light";
     const html = document.querySelector("html");
     if (html) html.setAttribute("data-theme", localTheme);
+    if (theme) {
+      if (theme === "dark") document.documentElement.classList.add("dark");
+      else document.documentElement.classList.remove("dark");
+    }
   }, [theme]);
 
   return (

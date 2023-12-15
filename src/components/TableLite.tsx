@@ -1,6 +1,3 @@
-import { UserType } from "../types/user.types";
-import Badge from "./Badge";
-import { colorSchemes } from "../utils/utils";
 import {
   ChangeEvent,
   Dispatch,
@@ -8,6 +5,9 @@ import {
   useEffect,
   useState,
 } from "react";
+import toast from "react-hot-toast";
+import { UserType } from "../types/user.types";
+import TableRow from "./TableRow";
 
 type TableLiteProps = {
   tableData: Array<UserType>;
@@ -31,10 +31,15 @@ const TableLite = (props: TableLiteProps) => {
   const [isAllSelected, setIsAllSelected] = useState(
     tableData.length === selectedIds.length
   );
+  const [pageNum, setPageNum] = useState(0);
+  const rowsPerPage = 5;
+  const totalPages = Math.ceil(tableData.length / rowsPerPage);
 
   useEffect(() => {
     if (tableData.length === selectedIds.length) setIsAllSelected(true);
     else setIsAllSelected(false);
+    if (selectedIds.length)
+      toast.success(selectedIds.length + " rows selected");
   }, [tableData, selectedIds]);
 
   const handleCheckboxChange = (
@@ -60,114 +65,91 @@ const TableLite = (props: TableLiteProps) => {
     setIsAllSelected(event.target.checked);
   };
 
+  if (!isLoading && tableData.length === 0) {
+    return (
+      <div className="w-full h-full grid place-items-center text-center">
+        <div className="flex gap-2 flex-col items-center">
+          <h2 className="font-bold">
+            No data till now! Add by clicking below button
+          </h2>
+          <button
+            className="btn btn-secondary rounded-full"
+            onClick={() => openModal()}
+          >
+            + Add row
+          </button>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="px-8 grid place-items-center flex-1">
-      <div className="overflow-x-auto  max-h-[70vh]">
-        <table className="table">
-          {/* head */}
-          <thead>
-            <tr>
-              <th>
-                <label>
-                  <input
-                    type="checkbox"
-                    className="checkbox checkbox-secondary"
-                    checked={isAllSelected}
-                    onChange={selectAllCheckboxes}
+      <div className="flex flex-col gap-4">
+        <div className="overflow-x-auto  max-h-[70vh]">
+          <table className="table">
+            {/* head */}
+            <thead className="sticky top-0 bg-gray-800 dark:text-white z-10">
+              <tr className="dark:bg-gray-800 overflow-hidden rounded-lg bg-gray-100">
+                <th className="rounded-tl-full rounded-bl-full">
+                  <label>
+                    <input
+                      type="checkbox"
+                      className="checkbox checkbox-secondary"
+                      checked={isAllSelected}
+                      onChange={selectAllCheckboxes}
+                    />
+                  </label>
+                </th>
+                <th>ID</th>
+                <th>Name</th>
+                <th>Phone Number</th>
+                <th>Email</th>
+                <th>Hobbies</th>
+                <th className="rounded-tr-full rounded-br-full">Action</th>
+              </tr>
+            </thead>
+            <tbody>
+              {tableData
+                .slice(
+                  pageNum * rowsPerPage,
+                  pageNum * rowsPerPage + rowsPerPage
+                )
+                .map((item) => (
+                  <TableRow
+                    key={item.id}
+                    includesSelectedItem={selectedIds.includes(item.id)}
+                    isLoading={isLoading}
+                    item={item}
+                    handleCheckboxChange={handleCheckboxChange}
+                    openDeleteModal={openDeleteModal}
+                    openEditModal={openModal}
                   />
-                </label>
-              </th>
-              <th>ID</th>
-              <th>Name</th>
-              <th>Phone Number</th>
-              <th>Email</th>
-              <th>Hobbies</th>
-              <th>Action</th>
-              <th></th>
-            </tr>
-          </thead>
-          <tbody>
-            {tableData.map((item) => {
-              return (
-                <tr
-                  key={item.id}
-                  className={`${
-                    isLoading ? "skeleton opacity-100 blur-sm" : ""
-                  }`}
-                >
-                  <th>
-                    <label>
-                      <input
-                        type="checkbox"
-                        className="checkbox checkbox-primary"
-                        checked={selectedIds.includes(item.id)}
-                        onChange={(event) =>
-                          handleCheckboxChange(event, item.id)
-                        }
-                      />
-                    </label>
-                  </th>
-                  <td>{item.id}</td>
-                  <td>
-                    <div className="flex items-center gap-3">
-                      {/* <div className="avatar">
-                      <div className="mask mask-squircle w-12 h-12">
-                        <img
-                          src="https://i.pravatar.cc/300"
-                          alt="Avatar Tailwind CSS Component"
-                        />
-                      </div>
-                    </div> */}
-                      <div>
-                        <div className="font-bold">{item.name}</div>
-                        <span className="badge badge-ghost badge-sm">
-                          {item.hobbies.length} hobbies
-                        </span>
-                      </div>
-                    </div>
-                  </td>
-
-                  <td>{item.phone}</td>
-                  <th>
-                    <button className="btn btn-ghost btn-xs">
-                      {item.email}
-                    </button>
-                  </th>
-                  <th>
-                    <div className="flex flex-wrap w-96 gap-2">
-                      {item.hobbies.map((hobby, index) => (
-                        <Badge
-                          key={hobby}
-                          text={hobby}
-                          bordered
-                          colorString={
-                            colorSchemes[index % colorSchemes.length]
-                          }
-                        />
-                      ))}
-                    </div>
-                  </th>
-                  <th>
-                    <div className="flex gap-2">
-                      <button
-                        className="btn btn-sm rounded-full"
-                        onClick={() => openModal(item.id)}
-                      >
-                        Update
-                      </button>
-                      <button
-                        onClick={() => openDeleteModal(item.id)}
-                        className="btn btn-sm btn-error btn-outline rounded-full"
-                      >
-                        Delete
-                      </button>
-                    </div>
-                  </th>
-                </tr>
-              );
-            })}
-          </tbody>
-        </table>
+                ))}
+            </tbody>
+          </table>
+        </div>
+        {/* table footer */}
+        <div className="flex justify-between items-center font-medium">
+          <h2>
+            Showing{" "}
+            <span className="text-primary font-extrabold">{rowsPerPage}</span>{" "}
+            results per page
+          </h2>
+          <div className="join">
+            {[...Array(totalPages).keys()].map((item) => (
+              <button
+                key={item}
+                className={`join-item btn ${
+                  item === pageNum ? "btn-primary" : ""
+                }`}
+                onClick={() => setPageNum(item)}
+              >
+                {item + 1}
+              </button>
+            ))}
+          </div>
+        </div>
       </div>
     </div>
   );

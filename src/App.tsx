@@ -85,6 +85,10 @@ function App() {
     // update state locally.
     const filteredData = tableData.filter((data) => data.id !== deletingRowId);
     setTableData(filteredData);
+    // remove this row if it is selectedIds.
+    setSelectedIds((prevData) =>
+      prevData.filter((item) => item !== deletingRowId)
+    );
   };
   const addRow = async () => {
     console.log("the whole data is ", editingRow);

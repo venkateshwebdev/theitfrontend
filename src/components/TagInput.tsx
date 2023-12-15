@@ -7,8 +7,9 @@ const TagInput = (props: {
   hobbies: Array<string>;
   addHobby: (hobby: string) => void;
   deleteHobby: (hobby: string) => void;
+  errorMessage?: string;
 }) => {
-  const { hobbies, addHobby, deleteHobby } = props;
+  const { hobbies, addHobby, deleteHobby, errorMessage } = props;
 
   const [hobby, setHobby] = useState("");
 
@@ -34,9 +35,12 @@ const TagInput = (props: {
           name="hobby"
           placeholder="Swimming etc"
           label="Hobbies"
+          errorMessage={errorMessage}
         />
         <button
-          className="btn btn-active w-20 btn-primary rounded-full"
+          className={`btn btn-active w-20 btn-primary rounded-full ${
+            errorMessage ? "mb-8" : ""
+          }`}
           onClick={onAddHandler}
         >
           +
