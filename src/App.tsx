@@ -48,14 +48,21 @@ function App() {
         body: JSON.stringify(body),
       });
       if (!response.ok) {
-        throw new Error(`HTTP error! Status: ${response.status}`);
+        const clean_errors = await response.json();
+        throw new Error(clean_errors.message ?? "Something went wrong");
       }
       const data = await response.json();
       toast.success("Action successful");
       return data;
-    } catch (err) {
-      console.log("Error reported ", err);
-      toast.error("Error Requesting");
+    } catch (err: any) {
+      console.log("Error reported :: ", err.message);
+      let errorMessage = err.message;
+      if (
+        errorMessage &&
+        (errorMessage as string).startsWith("Unexpected token")
+      )
+        errorMessage = "Fetching failed. please check URL and connection";
+      toast.error(errorMessage ?? "Someting went wrong");
     } finally {
       setIsLoading(false);
     }
@@ -109,7 +116,10 @@ function App() {
   /** add new row */
   const addRow = async () => {
     // post request, with new row data.
-    const data = await fetchWithLoader(backendURL, "post", editingRow);
+    const data = await fetchWithLoader(backendURL, "post", {
+      ...editingRow,
+      id: undefined, // backend will generate unique id. not required to send
+    });
     // locally updating the list with the newly updated data. for better UX.
     if (data) setTableData((prevData) => [...prevData, data]);
   };
