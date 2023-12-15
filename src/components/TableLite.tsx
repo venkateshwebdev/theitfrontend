@@ -10,10 +10,14 @@ import { UserType } from "../types/user.types";
 import TableRow from "./TableRow";
 
 type TableLiteProps = {
+  /** list of userData loaded. */
   tableData: Array<UserType>;
+  /** handler to open Edit modal with current selected row id */
   openModal: (id?: string) => void;
+  /** handler to open Delete modal with current selected row id */
   openDeleteModal: (id?: string) => void;
   isLoading: boolean;
+  /** holds the list of selected ids. selected via checkbox */
   selectedIds: Array<string>;
   setSelectedIds: Dispatch<SetStateAction<Array<string>>>;
 };
@@ -31,11 +35,13 @@ const TableLite = (props: TableLiteProps) => {
   const [isAllSelected, setIsAllSelected] = useState(
     tableData.length === selectedIds.length
   );
+  /** pagination utils */
   const [pageNum, setPageNum] = useState(0);
   const rowsPerPage = 5;
   const totalPages = Math.ceil(tableData.length / rowsPerPage);
 
   useEffect(() => {
+    /** if all items are selected we check the checkbox in the header. ( select all ) */
     if (tableData.length === selectedIds.length) setIsAllSelected(true);
     else setIsAllSelected(false);
     if (selectedIds.length)
@@ -60,11 +66,13 @@ const TableLite = (props: TableLiteProps) => {
   };
 
   const selectAllCheckboxes = (event: ChangeEvent<HTMLInputElement>) => {
+    // if checked include all the ids . else set the list as empty.
     if (event.target.checked) setSelectedIds(tableData.map((item) => item.id));
     else setSelectedIds([]);
     setIsAllSelected(event.target.checked);
   };
 
+  // if data is not loading and we dont have any data. show no data message.
   if (!isLoading && tableData.length === 0) {
     return (
       <div className="w-full h-full grid place-items-center text-center">

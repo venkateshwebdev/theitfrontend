@@ -1,5 +1,6 @@
 import { Toaster } from "react-hot-toast";
 
+/** General Toast component configuration as said by `react-hot-toast` package. */
 const ToastComponent = () => {
   return (
     <Toaster

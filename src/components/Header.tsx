@@ -1,5 +1,6 @@
 import DarkLightIcon from "./DarkLightIcon";
 
+/** Header to hold ThemeSwitch, Add row and Send rows button */
 const Header = (props: {
   openModal: (id?: string) => void;
   sendRows: () => void;

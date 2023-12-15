@@ -18,6 +18,7 @@ type EditFormProps = {
   onSubmit: () => void;
 };
 
+/** form error format */
 type EditFormErrorProps = {
   name?: string;
   phone?: string;
@@ -28,17 +29,16 @@ type EditFormErrorProps = {
 const EditForm = (props: EditFormProps) => {
   const { userData, onSubmit, setUserData } = props;
   const [formError, setFormError] = useState<EditFormErrorProps>({});
+  // references close button in modal. ( daisyUI lib requires this )
   const modalCloseButtonRef = useRef<HTMLButtonElement | null>(null);
 
   const onSubmitHandler = (event: FormEvent) => {
     event.preventDefault();
-    console.log(event.target);
     // if no errors. then only submit.
     // check userData -> name ( should not be empty )
     // check userData -> phone ( should not be empty ) and should match the regex
     //  check userData -> email ( should not be empty ) and should match the regex
     // check userData -> hobbies ( should not be empty )
-
     const isEmailValid = validateEmail(userData.email);
     const isPhoneValid = validatePhoneNumber(userData.phone);
     const isNameValid = userData.name.length > 4;
@@ -63,20 +63,21 @@ const EditForm = (props: EditFormProps) => {
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
+    // get the name of the input and the value associated with the input[name], update the value within the state.
     setUserData((prevData) => ({
       ...prevData,
       [name]: value,
     }));
+    // clear the error for this particular input ( because if user starts typing we wont show the error messagse )
     setFormError((prevData) => ({
       ...prevData,
       [name]: undefined,
     }));
-    console.log("name value", name, value);
   };
 
   const addHobby = (hobby: string) => {
+    // if the hobby is already included. dont add it again. just return.
     if (userData.hobbies.includes(hobby)) {
-      console.log("already we have");
       toast.error("This hobby is already present. Enter another");
       setFormError((prevData) => ({
         ...prevData,
@@ -84,16 +85,19 @@ const EditForm = (props: EditFormProps) => {
       }));
       return;
     }
+    // add the new hobby to the list.
     setUserData((prevData) => ({
       ...prevData,
       hobbies: [...prevData.hobbies, hobby],
     }));
+    // clear any error associated with this hobbies input.
     setFormError((prevData) => ({
       ...prevData,
       hobbies: undefined,
     }));
   };
   const deleteHobby = (hobby: string) => {
+    // directly remove the hobby from the hobbies list.
     setUserData((prevData) => ({
       ...prevData,
       hobbies: prevData.hobbies.filter((item) => item !== hobby),
@@ -101,7 +105,9 @@ const EditForm = (props: EditFormProps) => {
   };
 
   const onCloseModal = (event?: React.MouseEvent<HTMLButtonElement>) => {
+    // to prevent DaisyUI default event. (from docs)
     event?.preventDefault();
+    // clear all errors and close via ref click.
     setFormError({});
     modalCloseButtonRef.current?.click();
   };
@@ -146,14 +152,12 @@ const EditForm = (props: EditFormProps) => {
               deleteHobby={deleteHobby}
               errorMessage={formError.hobbies}
             />
-            {/* if there is a button in form, it will close the modal */}
+            {/* if there is a button in form, it will close the modal ( DAISYUI ) */}
             <div className="flex gap-2 w-1/2 self-end justify-end">
               <button className="btn w-1/2 rounded-full" onClick={onCloseModal}>
                 Close
               </button>
-              <button ref={modalCloseButtonRef} className="hidden">
-                hidden close button
-              </button>
+              <button ref={modalCloseButtonRef} className="hidden"></button>
               <button
                 className="btn w-1/2 btn-secondary rounded-full"
                 onClick={onSubmitHandler}

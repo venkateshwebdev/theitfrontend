@@ -6,6 +6,7 @@ import Badge from "./Badge";
 type TableRowProps = {
   item: UserType;
   isLoading: boolean;
+  /** whether the current is selected or not */
   includesSelectedItem: boolean;
   handleCheckboxChange: (
     event: ChangeEvent<HTMLInputElement>,
@@ -70,6 +71,7 @@ const TableRow = (props: TableRowProps) => {
       </th>
       <th>
         <div className="flex flex-wrap w-96 gap-2">
+          {/* we are only showing first 12 hobbies. since they takes much space if added more. */}
           {item.hobbies.slice(0, 12).map((hobby, index) => (
             <Badge
               key={hobby}
@@ -78,6 +80,7 @@ const TableRow = (props: TableRowProps) => {
               colorString={colorSchemes[index % colorSchemes.length]}
             />
           ))}
+          {/* we are only showing the remaining count. */}
           {item.hobbies.length - 12 > 0 && (
             <h2 className="opacity-70">+{item.hobbies.length - 12} more</h2>
           )}

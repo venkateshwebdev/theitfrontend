@@ -10,6 +10,11 @@ type CustomInputProps = {
   onChangeHandler: (e: ChangeEvent<HTMLInputElement>) => void;
 };
 
+/**
+ *
+ * @param props CustomInputProps
+ * @returns CustomInput. Common Input used across the app.
+ */
 const CustomInput = (props: CustomInputProps) => {
   const {
     label,
@@ -35,6 +40,7 @@ const CustomInput = (props: CustomInputProps) => {
         } w-full rounded-full transition-all duration-500`}
         onChange={onChangeHandler}
       />
+      {/* Error message will be show if errorMessage is passed. If no errormessage this block set to 0 opacity and height */}
       <div
         className={`label transition-all duration-300 ${
           errorMessage ? "opactity-100" : "opacity-0 h-0 absolute"

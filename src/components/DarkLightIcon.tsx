@@ -1,6 +1,7 @@
 import { ChangeEvent, useEffect, useState } from "react";
 
 const DarkLightIcon = () => {
+  /** check localstorage and set the theme if its set already in LS. if not default to dark */
   const [theme, setTheme] = useState<string>(
     (localStorage.getItem("theme")
       ? localStorage.getItem("theme")
@@ -19,7 +20,9 @@ const DarkLightIcon = () => {
     // else use the light theme as default.
     const localTheme = localStorage.getItem("theme") ?? "light";
     const html = document.querySelector("html");
+    // set theme attribute as tailwind suggested. (from tailwind docs )
     if (html) html.setAttribute("data-theme", localTheme);
+    // along with data-theme attribute we add or remove class "dark" based on the theme value. ( from tailwind docs )
     if (theme) {
       if (theme === "dark") document.documentElement.classList.add("dark");
       else document.documentElement.classList.remove("dark");

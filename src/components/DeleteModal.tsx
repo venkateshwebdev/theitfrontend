@@ -1,3 +1,4 @@
+/** Delete modal, when delete on row clicked */
 const DeleteModal = (props: { onDelete: () => void }) => {
   const { onDelete } = props;
   return (

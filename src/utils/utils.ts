@@ -1,3 +1,4 @@
+/** colors for badges */
 export const colorSchemes = [
   "badge-primary",
   "badge-secondary",

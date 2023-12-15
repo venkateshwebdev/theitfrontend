@@ -3,6 +3,7 @@ import CustomInput from "./CustomInput";
 import Badge from "./Badge";
 import { colorSchemes } from "../utils/utils";
 
+/** Hobbies input ( input + hobbies list ) */
 const TagInput = (props: {
   hobbies: Array<string>;
   addHobby: (hobby: string) => void;
@@ -15,6 +16,7 @@ const TagInput = (props: {
 
   const onAddHandler = (event: React.MouseEvent<HTMLButtonElement>) => {
     event.preventDefault();
+    // if hobby was typed. add that. else return;
     if (hobby) addHobby(hobby);
     setHobby("");
   };
@@ -53,7 +55,7 @@ const TagInput = (props: {
             isCancellable
             text={hobby}
             bordered
-            colorString={colorSchemes[index % colorSchemes.length]}
+            colorString={colorSchemes[index % colorSchemes.length]} // assign the colors in circular order.
             onRemove={onDeleteHandler}
           />
         ))}

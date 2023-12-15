@@ -1,11 +1,16 @@
 const Badge = (props: {
+  /** shows cress mark. if set we can delete the hobby */
   isCancellable?: boolean;
+  /** hobby text */
   text: string;
+  /** tailwind-class string to set color for badge */
   colorString?: string;
   bordered?: boolean;
+  /** handler to remove the selected hobby */
   onRemove?: (hobby: string) => void;
 }) => {
   const { isCancellable, text, colorString, bordered, onRemove } = props;
+
   return (
     <div
       className={`badge ${
@@ -15,6 +20,7 @@ const Badge = (props: {
       } opacity-80`}
     >
       {text}
+      {/* only if it is cancellable and have remove handler. then only show the cross svg mark */}
       {isCancellable && onRemove && (
         <svg
           xmlns="http://www.w3.org/2000/svg"
