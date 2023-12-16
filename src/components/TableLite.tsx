@@ -97,7 +97,11 @@ const TableLite = (props: TableLiteProps) => {
         <div className="overflow-x-auto  max-h-[70vh]">
           <table className="table">
             {/* head */}
-            <thead className="sticky top-0 bg-gray-800 dark:text-white z-10">
+            <thead
+              className={`sticky top-0 bg-gray-800 dark:text-white z-10 ${
+                isLoading ? "animate-pulse" : ""
+              }`}
+            >
               <tr className="dark:bg-gray-800 overflow-hidden rounded-lg bg-gray-100">
                 <th className="rounded-tl-full rounded-bl-full">
                   <label>
@@ -139,7 +143,7 @@ const TableLite = (props: TableLiteProps) => {
         </div>
         {/* table footer */}
         <div className="flex justify-between items-center font-medium">
-          <h2>
+          <h2 className={`${isLoading ? "animate-pulse" : ""}`}>
             Showing{" "}
             <span className="text-primary font-extrabold">{rowsPerPage}</span>{" "}
             results per page
