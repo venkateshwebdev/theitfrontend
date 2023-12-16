@@ -1,4 +1,5 @@
 import DarkLightIcon from "./DarkLightIcon";
+import Drawer from "./Drawer";
 
 /** Header to hold ThemeSwitch, Add row and Send rows button */
 const Header = (props: {
@@ -8,6 +9,7 @@ const Header = (props: {
   const { openModal, sendRows } = props;
   return (
     <div className="flex w-full">
+      <Drawer />
       <div className=""></div>
       <div className="flex flex-1 align-middle justify-end gap-4">
         <DarkLightIcon />
