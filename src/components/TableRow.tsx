@@ -57,7 +57,7 @@ const TableRow = (props: TableRowProps) => {
     </div>
   </div> */}
           <div>
-            <div className="font-bold">{item.name}</div>
+            <div className="font-bold whitespace-nowrap">{item.name}</div>
             <span className="badge badge-ghost badge-sm">
               {item.hobbies.length} hobbies
             </span>

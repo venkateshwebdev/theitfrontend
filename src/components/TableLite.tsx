@@ -92,7 +92,7 @@ const TableLite = (props: TableLiteProps) => {
   }
 
   return (
-    <div className="px-8 grid place-items-center flex-1">
+    <div className="px-8 grid place-items-center flex-1 overflow-y-scroll">
       <div className="flex flex-col gap-4">
         <div className="overflow-x-auto  max-h-[70vh]">
           <table className="table">

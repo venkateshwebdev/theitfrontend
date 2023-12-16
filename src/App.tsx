@@ -121,7 +121,7 @@ function App() {
       id: undefined, // backend will generate unique id. not required to send
     });
     // locally updating the list with the newly updated data. for better UX.
-    if (data) setTableData((prevData) => [...prevData, data]);
+    if (data) setTableData((prevData) => [data, ...prevData]);
   };
 
   /** sends selected row ids and entered email to api */

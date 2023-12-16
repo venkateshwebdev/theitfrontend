@@ -130,7 +130,7 @@ const EditForm = (props: EditFormProps) => {
             />
             <CustomInput
               type="text"
-              placeholder="1234567890"
+              placeholder="+91 1234567890"
               value={userData.phone}
               label="Phone number"
               name="phone"
